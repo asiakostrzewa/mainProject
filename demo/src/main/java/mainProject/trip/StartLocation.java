@@ -7,7 +7,6 @@ import mainProject.city.City;
 import javax.persistence.Entity;
 
 @Data
-@Entity
 public class StartLocation {
     private City city;
     private Airport airport;

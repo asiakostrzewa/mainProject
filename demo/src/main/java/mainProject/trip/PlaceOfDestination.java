@@ -8,7 +8,6 @@ import mainProject.hotel.Hotel;
 import javax.persistence.Entity;
 
 @Data
-@Entity
 public class PlaceOfDestination {
     private City city;
     private Hotel hotel;
