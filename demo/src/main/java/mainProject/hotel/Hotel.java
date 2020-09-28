@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "Hotels")
 public class Hotel extends BaseEntity {
     private String hotelName;
-    private Integer hotelStars;
+    private Double hotelStars;
     private String hotelDescription;
     @ManyToOne
     private City city;
