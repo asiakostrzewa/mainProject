@@ -24,4 +24,6 @@ public class Trip extends BaseEntity {
     private Integer placesForAdult;
     private Integer placesForChild;
 
+//    private BigDecimal tripPrice;
+
 }

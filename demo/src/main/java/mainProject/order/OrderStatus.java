@@ -1,2 +1,5 @@
-package mainProject.order;public enum OrderStatus {
+package mainProject.order;
+
+public enum OrderStatus {
+    NEW, CANCELLED, FINISHED
 }
