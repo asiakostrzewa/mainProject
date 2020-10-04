@@ -1,15 +1,13 @@
 package mainProject.trip;
 
+import java.util.ArrayList;
+import javax.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -17,7 +15,7 @@ import java.util.List;
 public class TripService {
 
     @Autowired
-    private TripRepository<Trip> tripRepository;
+    private TripRepository tripRepository;
 
     @Autowired
     private TripToTripDTOBuilder tripToTripDTOBuilder;
@@ -42,13 +40,13 @@ public class TripService {
         tripRepository.save(trip);
     }
 
+    @Autowired
     EntityManager em;
     //metoda
     public List<Trip> findTrip(){
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Trip> query = cb.createQuery(Trip.class);
         Root<Trip> root = query.from(Trip.class);
-        ParameterExpression<Integer> parameterExpression = cb.parameter(Integer.class);
         CriteriaQuery<Trip> id = query.select(root).where(cb.isNotNull(root.get("id")));
         return em.createQuery(id).getResultList();
     }

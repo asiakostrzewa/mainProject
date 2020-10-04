@@ -1,23 +1,21 @@
 package mainProject.trip;
 
+import javax.persistence.*;
 import lombok.Data;
+import mainProject.BaseEntity;
 import mainProject.airport.Airport;
 import mainProject.city.City;
 import mainProject.hotel.Hotel;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 @Data
 @Entity
-public class PlaceOfDestination {
-    private City city;
-    private Hotel hotel;
-    private Airport airport;
-    private Long placeOfDestinationId;
+public class PlaceOfDestination extends BaseEntity {
 
-    @Id
-    public Long getPlaceOfDestinationId() {
-        return placeOfDestinationId;
-    }
+    @ManyToOne
+    private City city;
+    @ManyToOne
+    private Hotel hotel;
+    @ManyToOne
+    private Airport airport;
+
 }

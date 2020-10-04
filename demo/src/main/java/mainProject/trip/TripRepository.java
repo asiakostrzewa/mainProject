@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TripRepository<T extends Trip> extends JpaRepository<Trip,Long> {
+public interface TripRepository extends JpaRepository<Trip,Long> {
 
     Optional<Trip> findById(Long id);
 
-    List<T> findTripsByContinent(Continent continent);
-    List<T> findTripsByCountry(Country country);
-    List<T> findTripsByCity(City city);
-    List<T> findTripsByHotel(Hotel hotel);
+//    List<T> findTripsByContinent(Continent continent);
+//    List<Trip> findTripsByCountry(Country country);
+//    List<Trip> findTripsByCity(City city);
+//    List<Trip> findTripsByHotel(Hotel hotel);
 
 
 }
