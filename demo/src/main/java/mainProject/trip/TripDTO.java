@@ -14,7 +14,7 @@ public class TripDTO {
     private PlaceOfDestination placeOfDestination;
     private String leaveDate;
     private String returnDate;
-    private Integer howManyDays;
+    //private Integer howManyDays;
     private TypeOfFoodEnum typeOfFoodEnum;
     private BigDecimal priceForAdult;
     private BigDecimal priceForChild;
