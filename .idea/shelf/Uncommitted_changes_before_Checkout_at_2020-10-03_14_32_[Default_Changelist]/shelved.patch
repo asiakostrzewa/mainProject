@@ -1,0 +1,589 @@
+Index: demo/src/main/java/mainProject/order/OrderController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.order;public class OrderController {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/order/OrderController.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/order/OrderController.java	(date 1601720923736)
+@@ -1,2 +1,20 @@
+-package mainProject.order;public class OrderController {
++package mainProject.order;
++
++
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.stereotype.Controller;
++import org.springframework.ui.Model;
++import org.springframework.web.bind.annotation.RequestMapping;
++
++@Controller
++public class OrderController {
++
++    @Autowired
++    private OrderService orderService;
++
++    @RequestMapping(value = "/placeOrder")
++    public String makeAnOrder(Model model) {
++        model.addAttribute("order", orderService.placeOrder());
++        return "orderFinished";
++    }
+ }
+Index: demo/src/main/java/mainProject/order/OrderLine.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.order;public class OrderLine {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/order/OrderLine.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/order/OrderLine.java	(date 1601725209146)
+@@ -1,2 +1,34 @@
+-package mainProject.order;public class OrderLine {
++package mainProject.order;
++
++
++import lombok.Getter;
++import lombok.Setter;
++import lombok.ToString;
++import mainProject.BaseEntity;
++import mainProject.trip.Trip;
++
++import javax.persistence.Column;
++import javax.persistence.Entity;
++import javax.persistence.OneToOne;
++import javax.persistence.Table;
++import java.io.Serializable;
++import java.math.BigDecimal;
++
++@Setter
++@Getter
++@Entity
++@ToString
++@Table(name = "order_lines")
++public class OrderLine extends BaseEntity implements Serializable {
++
++    @OneToOne
++    private Trip trip;
++
++    private Integer adultQuantity;
++    private Integer childQuantity;
++
++
++
++    @Column(name = "trip_price")
++    private BigDecimal tripPrice;
+ }
+Index: demo/src/main/java/mainProject/UserContextService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject;\r\n\r\nimport com.google.gson.Gson;\r\nimport lombok.Getter;\r\nimport mainProject.cart.Cart;\r\nimport mainProject.trip.Trip;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.web.context.annotation.SessionScope;\r\n\r\n\r\n@Service\r\n@SessionScope\r\npublic class UserContextService {\r\n\r\n\r\n    @Getter\r\n    private Cart cart = new Cart();\r\n    private static Gson gson = new Gson();\r\n\r\n    public String getCartAsJson() {\r\n        return gson.toJson(cart);\r\n    }\r\n\r\n    public void addTripToCart(Trip trip) {\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/UserContextService.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/UserContextService.java	(date 1601726557150)
+@@ -3,10 +3,16 @@
+ import com.google.gson.Gson;
+ import lombok.Getter;
+ import mainProject.cart.Cart;
++import mainProject.order.OrderLine;
+ import mainProject.trip.Trip;
++import mainProject.user.RoleTypeEnum;
++import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+ import org.springframework.stereotype.Service;
+ import org.springframework.web.context.annotation.SessionScope;
+ 
++import java.util.List;
++import java.util.Optional;
++
+ 
+ @Service
+ @SessionScope
+@@ -15,12 +21,65 @@
+ 
+     @Getter
+     private Cart cart = new Cart();
++
+     private static Gson gson = new Gson();
+ 
++    public String getLoggedUserEmail() {
++        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
++        if (authentication instanceof AnonymousAuthenticationToken) {
++            return null;
++        }
++        return authentication.getName();
++    }
++
++
++    public boolean admin() {
++        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
++        if (authentication.getAuthorities().stream().anyMatch(e -> RoleTypeEnum.ADMIN.getRoleName().equalsIgnoreCase(e.getAuthority()))) {
++            return true;
++        }
++        return false;
++    }
++
++    public boolean user() {
++        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
++        if (authentication.getAuthorities().stream().anyMatch(e -> RoleTypeEnum.USER.getRoleName().equalsIgnoreCase(e.getAuthority()))) {
++            return true;
++        }
++        return false;
++    }
++
+     public String getCartAsJson() {
+         return gson.toJson(cart);
+     }
+ 
++
++    public void addProductToCart(Trip trip) {
++        List<OrderLine> orderLines = cart.getOrderLines();
++        Optional<OrderLine> first = orderLines.stream().filter(e -> e.getTrip().getId().equals(trip.getId())).findFirst();
++        if (first.isPresent()) {
++            first.get().setQuantity(first.get().getQuantity() + 1);
++        } else {
++            OrderLine orderLine = new OrderLine();
++            orderLine.setTrip(trip);
++            orderLine.setTripPrice(trip.get());
++            orderLine.setAdultQuantity(1);
++            orderLine.setChildQuantity(1);
++            orderLines.add(orderLine);
++        }
++    }
++
++//    public void getCurrentUser() {
++//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
++//        if (authentication.getAuthorities().stream().anyMatch(e -> RoleTypeEnum.USER.getRoleName().equalsIgnoreCase(e.getAuthority()))) {
++//            System.out.println();
++//        }
++//    }
++
++    public void clearCart() {
++        cart = new Cart();
++    }
++
+     public void addTripToCart(Trip trip) {
+     }
+ }
+Index: demo/src/main/java/mainProject/trip/Trip.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.trip;\r\n\r\nimport lombok.Data;\r\nimport mainProject.BaseEntity;\r\n\r\nimport javax.persistence.Entity;\r\nimport javax.persistence.ManyToOne;\r\nimport java.math.BigDecimal;\r\n\r\n@Entity\r\n@Data\r\npublic class Trip extends BaseEntity {\r\n    @ManyToOne\r\n    private StartLocation startLocation;\r\n    @ManyToOne\r\n    private PlaceOfDestination placeOfDestination;\r\n    private String leaveDate;\r\n    private String returnDate;\r\n    private Integer howManyDays;\r\n    private TypeOfFoodEnum typeOfFoodEnum;\r\n    private BigDecimal priceForAdult;\r\n    private BigDecimal priceForChild;\r\n    private boolean promoted;\r\n    private Integer placesForAdult;\r\n    private Integer placesForChild;\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/trip/Trip.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/trip/Trip.java	(date 1601720744689)
+@@ -21,7 +21,9 @@
+     private BigDecimal priceForAdult;
+     private BigDecimal priceForChild;
+     private boolean promoted;
+-    private Integer placesForAdult;
+-    private Integer placesForChild;
++    private Integer placesForAdult;  // do orderu??
++    private Integer placesForChild;  // do orderu??
++
++//    private BigDecimal tripPrice;
+ 
+ }
+Index: demo/src/main/java/mainProject/user/UserRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.user;\r\n\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\n@Repository\r\npublic interface UserRepository extends JpaRepository<User,Long> {\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/user/UserRepository.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/user/UserRepository.java	(date 1601725639331)
+@@ -3,7 +3,10 @@
+ import org.springframework.data.jpa.repository.JpaRepository;
+ import org.springframework.stereotype.Repository;
+ 
++import java.util.List;
++
+ @Repository
+ public interface UserRepository extends JpaRepository<User,Long> {
+ 
++    User findByUsername(String loggedUserEmail);
+ }
+Index: demo/src/main/java/mainProject/trip/TripRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.trip;\r\n\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.stereotype.Repository;\r\n\r\n@Repository\r\npublic interface TripRepository extends JpaRepository<Trip,Long> {\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/trip/TripRepository.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/trip/TripRepository.java	(date 1601655251293)
+@@ -1,9 +1,13 @@
+ package mainProject.trip;
+ 
++import mainProject.BaseEntity;
+ import org.springframework.data.jpa.repository.JpaRepository;
+ import org.springframework.stereotype.Repository;
+ 
++import java.util.Optional;
++
+ @Repository
+-public interface TripRepository extends JpaRepository<Trip,Long> {
++public interface TripRepository<T extends BaseEntity> extends JpaRepository<Trip,Long> {
+ 
++    Optional<T> findTripById(Long id);
+ }
+Index: demo/src/main/java/mainProject/cart/CartService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.cart;\r\n\r\nimport org.springframework.stereotype.Service;\r\n\r\n@Service\r\npublic class CartService {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/cart/CartService.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/cart/CartService.java	(date 1601727554853)
+@@ -1,7 +1,26 @@
+ package mainProject.cart;
+ 
++
++import mainProject.trip.Trip;
+ import org.springframework.stereotype.Service;
+ 
++import java.math.BigDecimal;
++
++
+ @Service
++
+ public class CartService {
++
++    public BigDecimal calculateCartPrice(Cart cart) {  //ilosc wycieczek, dorosli plus dzieci, rodzaj wyzywieniaa
++        BigDecimal tripPrice = cart.getOrderLines()
++                .stream()
++                .map(orderLine -> {
++                    Trip trip = orderLine.getTrip();
++                    return trip.getPriceForAdult().multiply(new BigDecimal(orderLine.getAdultQuantity())).add(trip.getPriceForChild().multiply(new BigDecimal(orderLine.getChildQuantity())));
++                }).reduce((bigDecimal, bigDecimal2) -> bigDecimal. add(bigDecimal2))
++                        .orElse(BigDecimal.ZERO);
++        return tripPrice;
++    }
++
++
+ }
+Index: demo/src/main/java/mainProject/cart/Cart.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.cart;\r\n\r\npublic class Cart {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/cart/Cart.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/cart/Cart.java	(date 1601726557166)
+@@ -1,4 +1,19 @@
+ package mainProject.cart;
+ 
++
++import lombok.Getter;
++import lombok.Setter;
++import mainProject.order.OrderLine;
++import org.assertj.core.util.Lists;
++
++import java.util.List;
++
++@Getter
++@Setter
+ public class Cart {
++
++    private List<OrderLine> orderLines = Lists.newArrayList();
++
++
+ }
++
+Index: demo/src/main/java/mainProject/cart/CartController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.cart;\r\n\r\nimport org.springframework.stereotype.Controller;\r\n\r\n@Controller\r\npublic class CartController {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/cart/CartController.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/cart/CartController.java	(date 1601727784201)
+@@ -1,7 +1,38 @@
+ package mainProject.cart;
+ 
++import mainProject.UserContextService;
++import mainProject.trip.Trip;
++import mainProject.trip.TripRepository;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.http.ResponseEntity;
+ import org.springframework.stereotype.Controller;
++import org.springframework.web.bind.annotation.GetMapping;
++import org.springframework.web.bind.annotation.PostMapping;
++import org.springframework.web.bind.annotation.RequestParam;
+ 
+ @Controller
+ public class CartController {
++    @Autowired
++    private TripRepository<Trip> tripRepository;
++
++    @Autowired
++    private UserContextService userContextService;
++
++
++
++    @PostMapping("/addToCart")
++    public ResponseEntity<String> addToCart(@RequestParam(required = false) String prodId) {
++
++        tripRepository.findTripById(Long.valueOf(prodId)).ifPresent(userContextService::addTripToCart);
++        return ResponseEntity.ok().body(userContextServicge.getCartAsJson());
++    }
++
++    @GetMapping(value = "/cartElements")
++    public ResponseEntity<String> cartElements() {
++        String cartAsJson = userContextService.getCartAsJson();
++        if (cartAsJson == null) {
++            return ResponseEntity.badRequest().body("Brak wycieczek o podanych parametrach");
++        }
++        return ResponseEntity.ok().body(cartAsJson);
++    }
+ }
+Index: demo/src/main/java/mainProject/LocalDateTimeConverter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.order;public class LocalDateTimeConverter {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/LocalDateTimeConverter.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/LocalDateTimeConverter.java	(date 1601718197474)
+@@ -1,2 +1,23 @@
+-package mainProject.order;public class LocalDateTimeConverter {
+-}
++package mainProject;
++
++import javax.persistence.AttributeConverter;
++import javax.persistence.Converter;
++import java.sql.Timestamp;
++import java.time.LocalDateTime;
++import java.util.Optional;
++
++@Converter(autoApply = true)
++public class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
++    @Override
++    public Timestamp convertToDatabaseColumn(LocalDateTime localDateTime) {
++        return Optional.ofNullable(localDateTime)
++                .map(Timestamp::valueOf)
++                .orElse(null);
++    }
++    @Override
++    public LocalDateTime convertToEntityAttribute(Timestamp timestamp) {
++        return Optional.ofNullable(timestamp)
++                .map(Timestamp::toLocalDateTime)
++                .orElse(null);
++    }
++}
+\ No newline at end of file
+Index: demo/src/main/java/mainProject/order/OrderStatus.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.order;public enum OrderStatus {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/order/OrderStatus.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/order/OrderStatus.java	(date 1601718119926)
+@@ -1,2 +1,5 @@
+-package mainProject.order;public enum OrderStatus {
++package mainProject.order;
++
++public enum OrderStatus {
++    NEW, CANCELLED, FINISHED
+ }
+Index: demo/src/main/java/mainProject/order/OrderRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.order;public class OrderRepository {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/order/OrderRepository.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/order/OrderRepository.java	(date 1601717571368)
+@@ -1,2 +1,7 @@
+-package mainProject.order;public class OrderRepository {
++package mainProject.order;
++
++
++import org.springframework.data.jpa.repository.JpaRepository;
++
++public interface OrderRepository extends JpaRepository<Order, Long> {
+ }
+Index: demo/src/main/java/mainProject/order/Order.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.order;public class Order {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/order/Order.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/order/Order.java	(date 1601718775479)
+@@ -1,2 +1,50 @@
+-package mainProject.order;public class Order {
+-}
++package mainProject.order;
++
++import lombok.*;
++import mainProject.BaseEntity;
++import mainProject.LocalDateTimeConverter;
++import mainProject.user.User;
++
++import javax.persistence.*;
++import java.io.Serializable;
++import java.math.BigDecimal;
++import java.time.LocalDateTime;
++import java.util.List;
++
++
++@Entity
++    @Table(name = "order")
++    @ToString(exclude = "user")
++    @Setter
++    @Getter
++    @AllArgsConstructor
++    @NoArgsConstructor
++    public class Order extends BaseEntity implements Serializable {
++
++        private String userName;
++
++        private BigDecimal totalCost;
++
++//        @Embedded
++//        @AttributeOverrides({
++//                @AttributeOverride(name = "street", column = @Column(name = "customer_street")),
++//                @AttributeOverride(name = "city", column = @Column(name = "customer_city")),
++//                @AttributeOverride(name = "country", column = @Column(name = "customer_country")),
++//                @AttributeOverride(name = "zipCode", column = @Column(name = "customer_postal_code"))})
++//        private UserAddress customerAddress;
++
++
++        @Convert(converter = LocalDateTimeConverter.class)
++        private LocalDateTime creationDate;
++
++        @OneToMany(cascade = CascadeType.ALL)
++        private List<OrderLine> order;
++
++        @ManyToOne
++        private User user;
++
++        @Enumerated(EnumType.STRING)
++        private OrderStatus orderStatus;
++
++    }
++
+Index: .idea/mainProject.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"JAVA_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\" inherit-compiler-output=\"true\">\r\n    <exclude-output />\r\n    <content url=\"file://$MODULE_DIR$\" />\r\n    <orderEntry type=\"inheritedJdk\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/mainProject.iml	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ .idea/mainProject.iml	(date 1601309960023)
+@@ -2,7 +2,10 @@
+ <module type="JAVA_MODULE" version="4">
+   <component name="NewModuleRootManager" inherit-compiler-output="true">
+     <exclude-output />
+-    <content url="file://$MODULE_DIR$" />
++    <content url="file://$MODULE_DIR$">
++      <excludeFolder url="file://$MODULE_DIR$/demo/src/main/resources/frontend/angular-app/dist" />
++      <excludeFolder url="file://$MODULE_DIR$/demo/src/main/resources/frontend/angular-app/tmp" />
++    </content>
+     <orderEntry type="inheritedJdk" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+Index: demo/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n\txsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n\t<modelVersion>4.0.0</modelVersion>\r\n\t<parent>\r\n\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t<artifactId>spring-boot-starter-parent</artifactId>\r\n\t\t<version>2.3.4.RELEASE</version>\r\n\t\t<relativePath/> <!-- lookup parent from repository -->\r\n\t</parent>\r\n\t<groupId>mainProject</groupId>\r\n\t<artifactId>demo</artifactId>\r\n\t<version>0.0.1-SNAPSHOT</version>\r\n\t<name>demo</name>\r\n\t<description>Demo project for Spring Boot</description>\r\n\r\n\t<properties>\r\n\t\t<java.version>11</java.version>\r\n\t</properties>\r\n\r\n\t<dependencies>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-web</artifactId>\r\n\t\t</dependency>\r\n\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-devtools</artifactId>\r\n\t\t\t<scope>runtime</scope>\r\n\t\t\t<optional>true</optional>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>com.h2database</groupId>\r\n\t\t\t<artifactId>h2</artifactId>\r\n\t\t\t<scope>runtime</scope>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.projectlombok</groupId>\r\n\t\t\t<artifactId>lombok</artifactId>\r\n\t\t\t<optional>true</optional>\r\n\t\t</dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-test</artifactId>\r\n\t\t\t<scope>test</scope>\r\n\t\t\t<exclusions>\r\n\t\t\t\t<exclusion>\r\n\t\t\t\t\t<groupId>org.junit.vintage</groupId>\r\n\t\t\t\t\t<artifactId>junit-vintage-engine</artifactId>\r\n\t\t\t\t</exclusion>\r\n\t\t\t</exclusions>\r\n\t\t</dependency>\r\n        <dependency>\r\n            <groupId>javax.persistence</groupId>\r\n            <artifactId>javax.persistence-api</artifactId>\r\n            <version>2.2</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>javax.validation</groupId>\r\n            <artifactId>validation-api</artifactId>\r\n            <version>2.0.1.Final</version>\r\n        </dependency>\r\n\t\t<dependency>\r\n\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t<artifactId>spring-boot-starter-data-jpa</artifactId>\r\n\t\t</dependency>\r\n    </dependencies>\r\n\r\n\t<build>\r\n\t\t<plugins>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>org.springframework.boot</groupId>\r\n\t\t\t\t<artifactId>spring-boot-maven-plugin</artifactId>\r\n\t\t\t</plugin>\r\n\t\t\t<plugin>\r\n\t\t\t\t<groupId>org.codehaus.mojo</groupId>\r\n\t\t\t\t<artifactId>exec-maven-plugin</artifactId>\r\n\t\t\t\t<version>1.6.0</version>\r\n\t\t\t\t<executions>\r\n\t\t\t\t\t<execution>\r\n\t\t\t\t\t\t<phase>validate</phase>\r\n\t\t\t\t\t\t<goals>\r\n\t\t\t\t\t\t\t<goal>exec</goal>\r\n\t\t\t\t\t\t</goals>\r\n\t\t\t\t\t</execution>\r\n\t\t\t\t</executions>\r\n\t\t\t\t<configuration>\r\n\t\t\t\t\t<executable>ng</executable>\r\n\t\t\t\t\t<workingDirectory>src/main/resources/frontend/angular-app</workingDirectory>\r\n\t\t\t\t\t<arguments>\r\n\t\t\t\t\t\t<argument>build</argument>\r\n\t\t\t\t\t</arguments>\r\n\t\t\t\t</configuration>\r\n\t\t\t</plugin>\r\n\t\t</plugins>\r\n\t</build>\r\n\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/pom.xml	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/pom.xml	(date 1601655693851)
+@@ -65,7 +65,21 @@
+ 			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+ 		</dependency>
+-    </dependencies>
++        <dependency>
++            <groupId>org.assertj</groupId>
++            <artifactId>assertj-core</artifactId>
++        </dependency>
++        <dependency>
++            <groupId>com.google.code.gson</groupId>
++            <artifactId>gson</artifactId>
++            <version>2.8.6</version>
++        </dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-autoconfigure</artifactId>
++			<version>2.3.3.RELEASE</version>
++		</dependency>
++	</dependencies>
+ 
+ 	<build>
+ 		<plugins>
+Index: demo/src/main/java/mainProject/order/OrderService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package mainProject.order;public class OrderService {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- demo/src/main/java/mainProject/order/OrderService.java	(revision f9f3e0d94eb95d975092ae3bf99edbe40e64243c)
++++ demo/src/main/java/mainProject/order/OrderService.java	(date 1601725639347)
+@@ -1,2 +1,47 @@
+-package mainProject.order;public class OrderService {
++package mainProject.order;
++
++
++import mainProject.UserContextService;
++import mainProject.cart.Cart;
++import mainProject.cart.CartService;
++import mainProject.trip.TripRepository;
++import mainProject.user.User;
++import mainProject.user.UserRepository;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.stereotype.Service;
++
++import java.time.LocalDateTime;
++
++@Service
++public class OrderService {
++
++    @Autowired
++    private UserContextService userContextService;
++
++    @Autowired
++    private OrderRepository ordersRepository;
++
++    @Autowired
++    private UserRepository userRepository;
++
++    @Autowired
++    private CartService cartService;
++
++    @Autowired
++    private TripRepository tripRepository;
++
++    public Order placeOrder() {
++        Cart cart = userContextService.getCart();
++        String loggedUserEmail = userContextService.getLoggedUserEmail();
++        User user = userRepository.findByUsername(loggedUserEmail);
++
++        cart.getOrderLines()
++                .stream()
++                .peek(p -> p.getTrip())
++                .map(e->e.getTrip()).forEach(tripRepository::save);
++
++        Order order = ordersRepository.save(new Order(user.getUsername(), cartService.calculateCartPrice(cart), LocalDateTime.now(), cart.getOrderLines(), user, OrderStatus.NEW));
++        userContextService.clearCart();
++        return order;
++    }
+ }
