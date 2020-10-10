@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CartController {
     @Autowired
-    private TripRepository<Trip> tripRepository;
+    private TripRepository tripRepository;
 
     @Autowired
     private UserContextService userContextService;
@@ -23,7 +23,7 @@ public class CartController {
     @PostMapping("/addToCart")
     public ResponseEntity<String> addToCart(@RequestParam(required = false) String prodId) {
 
-        tripRepository.findTripById(Long.valueOf(prodId)).ifPresent(userContextService::addTripToCart);
+        tripRepository.findById(Long.valueOf(prodId)).ifPresent(userContextService::addTripToCart);
         return ResponseEntity.ok().body(userContextService.getCartAsJson());
     }
 

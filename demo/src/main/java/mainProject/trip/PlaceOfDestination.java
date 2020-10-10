@@ -7,6 +7,7 @@ import mainProject.airport.Airport;
 import mainProject.city.City;
 import mainProject.hotel.Hotel;
 
+
 @Data
 @Entity
 public class PlaceOfDestination extends BaseEntity {
