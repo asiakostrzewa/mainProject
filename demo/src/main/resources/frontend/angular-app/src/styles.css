@@ -1,1 +1,240 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500&display=swap');
+
+/* Ustalenie właściwości "box-sizing" dla wszystkich elementów */
+* {
+  box-sizing: border-box;
+}
+/* Właściwości dla body */
+body {
+  height: 100vh;
+  font-family: 'Baloo Tamma 2', cursive;
+  font-size: 16px;
+  margin: 0;
+}
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Klasa kontenera, która ma ograniczoną szerokość i wyśrodkowuje content */
+/* Ustawienie lewego i prawego marginesu na "auto" wyśrodkowuje kontener */
+.container {
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+}
+
+/* Tabele
+table {
+  width: 100%;
+}
+table th,
+table td {
+  padding: 8px;
+  text-align: left;
+}
+// Cieniujemy co drugi (parzysty) wiersz tabeli
+// Używamy tbody, aby upewnić się, że nie cieniujemy nagłówka - to zachowuje kolejność cieniowania
+table tbody > tr:nth-child(odd) {
+  background: #eeeeee;
+} */
+
+/* Formularze */
+input {
+  height: 44px;
+  border: 1px solid #cecece;
+  border-radius: 0;
+  font-size: 16px;
+  color: #52545a;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+input:active,
+input:focus {
+  border: 1px solid #80838d;
+  outline: 0;
+}
+
+/* Nagłówki */
+h2 {
+  text-transform: uppercase;
+  font-weight: 400;
+  border-bottom: 2px solid #eeeeee;
+}
+
+/* Linki */
+a {
+  color: #777777;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+a:hover {
+  color: #e74c3c;
+}
+
+/* Przyciski */
+.button {
+  display: inline-block;
+  margin: 2px;
+  padding: 15.5px 25px 12.5px 25px;
+  border: 0;
+  border-radius: 0;
+  background: #999999;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 16px;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+/* Przycisk po najechaniu kursorem */
+.button:hover {
+  background: #888888;
+  color: #ffffff;
+}
+/* Przycisk w stanie aktywnym */
+.button:active,
+.button:focus {
+  background: #777777;
+  outline: 0;
+}
+
+/* Przycisk w kolorze morskim */
+.button-seacolor {
+  background: #5381b6;
+}
+.button-seacolor:hover {
+  background:  #80838d;
+}
+.button-seacolor:active,
+.button-seacolor:focus {
+  background:  #80838d;
+}
+
+/* Przycisk Ameryki Północnej */
+.button-northAmerica {
+  background-image: url( https://negativespace.co/wp-content/uploads/2019/03/negative-space-red-sandstone-of-antelope-canyon-1062x708.jpg );
+}
+.button-northAmerica:hover {
+  background:  #80838d;
+}
+.button-northAmerica:active,
+.button-northAmerica:focus {
+  background:  #80838d;
+}
+
+/* Przycisk Ameryki Południowej */
+.button-southAmerica {
+  background-image: url( https://isorepublic.com/wp-content/uploads/2019/05/iso-republic-cactus-california-1100x825.jpg );
+}
+.button-southAmerica:hover {
+  background:  #80838d;
+}
+.button-southAmerica:active,
+.button-southAmerica:focus {
+  background:  #80838d;
+}
+
+/* Przycisk Afryka */
+.button-Africa {
+  background-image: url( https://negativespace.co/wp-content/uploads/2017/05/negative-space-grayscale-elephant-animals-africa-pixabay-thumb-1.jpg );
+}
+.button-Africa:hover {
+  background:  #80838d;
+}
+.button-Africa:active,
+.button-Africa:focus {
+  background:  #80838d;
+}
+
+/* Przycisk Europa */
+.button-Europe {
+  background-image: url( https://cdn.stocksnap.io/img-thumbs/960w/paris-aerial_WMH53WWA3J.jpg );
+}
+.button-Europe:hover {
+  background:  #80838d;
+}
+.button-Europe:active,
+.button-Europe:focus {
+  background:  #80838d;
+}
+
+/* Przycisk Azja */
+.button-Asia {
+  background-image: url( https://negativespace.co/wp-content/uploads/2017/07/negative-space-fresh-sushi-yam-california-rolls-jakub-kapusnak-thumb-1.jpg );
+}
+.button-Asia:hover {
+  background:  #80838d;
+}
+.button-Asia:active,
+.button-Asia:focus {
+  background:  #80838d;
+}
+
+/* Przycisk Australia */
+.button-Australia {
+  background-image: url( https://cdn.stocksnap.io/img-thumbs/960w/australia-beach_4P7RQ1W2CF.jpg );
+}
+.button-Australia:hover {
+  background:  #80838d;
+}
+.button-Australia:active,
+.button-Australia:focus {
+  background:  #80838d;
+}
+
+/* Przycisk w kolorze czerwonym */
+.button-orange {
+  background: #e74c3c;
+}
+.button-orange:hover {
+  background: #80838d;
+}
+.button-orange:active,
+.button-orange:focus {
+  background: #80838d;
+}
+
+/* Header */
+header {
+  padding-top: 20px;
+  padding-bottom: 15px;
+  background-image: url( https://cdn.stocksnap.io/img-thumbs/960w/sky-clouds_WRBKMOCJSE.jpg );
+  background-attachment: fixed;
+  background-size: cover;
+  color: #ffffff;
+  text-align: center;
+}
+header h1 {
+  margin: 0;
+}
+
+/* Footer */
+main {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+}
+
+footer {
+  background-image: url( https://cdn.stocksnap.io/img-thumbs/960w/sky-clouds_WRBKMOCJSE.jpg );
+  background-attachment: fixed;
+  background-size: cover;
+  color: #ffffff;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  text-align: center;
+}
+
+/* Media Query dla urządzeń o minimalnej szerokości 992px */
+/* czyli dla komputerów stacjonarnych */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}

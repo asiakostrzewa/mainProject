@@ -1,0 +1,18 @@
+<section *ngIf="offer">
+  <h2>Edycja #{{offer.id}} <i>{{offer.continent}}</i></h2>
+
+  <div>
+    <label for="continent">Kontynent</label>
+    <input type="text" id="continent" [(ngModel)]="offer.continent">
+  </div>
+
+  <div>
+    <label for="country">Nazwa użytkownika:</label>
+    <input type="text" id="country" [(ngModel)]="offer.country">
+  </div>
+
+  <div>
+    <button (click)="save()" class="button button-seacolor">Zapisz</button>
+    <button (click)="goBack()" class="button button-orange">Anuluj</button>
+  </div>
+</section>
