@@ -8,28 +8,10 @@ import mainProject.hotel.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+
 public class TripToTripDTOBuilder {
 
-    @Autowired
-    private AirportRepository airportRepository;
-
-    @Autowired
-    private CityRepository cityRepository;
-
-    @Autowired
-    private ContinentRepository continentRepository;
-
-    @Autowired
-    private CountryRepository countryRepository;
-
-    @Autowired
-    private HotelRepository hotelRepository;
-
-    @Autowired
-    private TripRepository tripRepository;
-
-    public TripDTO buildDTO(Trip trip){
+    public static TripDTO buildDTO(Trip trip){
         return TripDTO.builder()
                 .id(trip.getId())
                 .startLocation(trip.getStartLocation())
@@ -45,14 +27,13 @@ public class TripToTripDTOBuilder {
                 .build();
     }
 
-    public Trip buildEntity(TripDTO tripDTO){
+    public static Trip buildEntity(TripDTO tripDTO){
         Trip trip = null;
 
         trip.setStartLocation(tripDTO.getStartLocation());
         trip.setPlaceOfDestination(tripDTO.getPlaceOfDestination());
         trip.setLeaveDate(tripDTO.getLeaveDate());
         trip.setReturnDate(tripDTO.getReturnDate());
-        //trip.setHowManyDays(tripDTO.getHowManyDays());
         trip.setTypeOfFoodEnum(tripDTO.getTypeOfFoodEnum());
         trip.setPriceForAdult(tripDTO.getPriceForAdult());
         trip.setPriceForChild(tripDTO.getPriceForChild());
