@@ -5,6 +5,7 @@ import mainProject.UserContextService;
 import mainProject.cart.Cart;
 import mainProject.cart.CartService;
 import mainProject.trip.TripRepository;
+import mainProject.user.Customer;
 import mainProject.user.User;
 import mainProject.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class OrderService {
                 .stream()
                 .peek(p -> p.getTrip())
                 .map(e->e.getTrip()).forEach(tripRepository::save);
+
 
         Order order = ordersRepository.save(new Order(user.getUsername(), cartService.calculateCartPrice(cart), LocalDateTime.now(), cart.getOrderLines(), user, OrderStatus.NEW));
         userContextService.clearCart();

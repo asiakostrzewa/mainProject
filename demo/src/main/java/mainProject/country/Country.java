@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Countries")
 public class Country extends BaseEntity {
-    private String name;
+    private String countryName;
     @ManyToOne
     private Continent continent;
 }

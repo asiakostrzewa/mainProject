@@ -3,6 +3,7 @@ package mainProject.order;
 import lombok.*;
 import mainProject.BaseEntity;
 import mainProject.LocalDateTimeConverter;
+import mainProject.user.Customer;
 import mainProject.user.User;
 
 import javax.persistence.*;
@@ -29,13 +30,18 @@ import java.util.List;
         private LocalDateTime creationDate;
 
         @OneToMany(cascade = CascadeType.ALL)
-        private List<OrderLine> order;
+        private List<OrderLine> orders;
 
         @ManyToOne
         private User user;
 
+        @ManyToOne
+        private Customer customer;
+
         @Enumerated(EnumType.STRING)
         private OrderStatus orderStatus;
 
+    public Order(String username, BigDecimal calculateCartPrice, LocalDateTime now, List<OrderLine> orderLines, User user, OrderStatus aNew) {
     }
+}
 
