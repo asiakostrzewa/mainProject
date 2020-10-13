@@ -52,41 +52,45 @@ public class TripService {
     @Autowired
     EntityManager em;
     //metoda
-    public List<Trip> findTrip(StartLocation startLocation, PlaceOfDestination placeOfDestination, String leaveDate, String returnDate, TypeOfFoodEnum typeOfFoodEnum, BigDecimal priceForAdult, BigDecimal priceForChild, Boolean promoted, Integer placesForAdult, Integer placesForChild){
+    public List<Trip> findTrip(QueryParams queryParams){
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Trip> query = cb.createQuery(Trip.class);
         Root<Trip> root = query.from(Trip.class);
         List<Predicate> predicates = new ArrayList<>();
         CriteriaQuery<Trip> id = query.select(root).where(cb.isNotNull(root.get("id")));
-        if(startLocation != null){
-            predicates.add(cb.equal(root.get("start location"), startLocation));
+        if(queryParams.getStartLocation() != null){
+            predicates.add(cb.equal(root.get("start location"), queryParams.getStartLocation()));
         }
-        if(placeOfDestination != null){
-            predicates.add(cb.equal(root.get("place of destination"), placeOfDestination));
+        try{
+            if(queryParams.getPlaceOfDestination() != null){
+                predicates.add(cb.equal(root.get("place of destination"), queryParams.getPlaceOfDestination()));
+            }
+        }catch(NullPointerException e){
+            System.out.println("Pass a value");
         }
-        if(!leaveDate.equals("")){
-            predicates.add(cb.like(root.get("leave date"), "%" + leaveDate +"%"));
+        if(!queryParams.getLeaveDate().equals("")){
+            predicates.add(cb.like(root.get("leave date"), "%" + queryParams.getLeaveDate() +"%"));
         }
-        if(!returnDate.equals("")){
-            predicates.add(cb.like(root.get("return date"), "%" + returnDate +"%"));
+        if(!queryParams.getReturnDate().equals("")){
+            predicates.add(cb.like(root.get("return date"), "%" + queryParams.getReturnDate() +"%"));
         }
-        if(typeOfFoodEnum != null){
-            predicates.add(cb.equal(root.get("type of food"), typeOfFoodEnum));
+        if(queryParams.getTypeOfFoodEnum()!= null){
+            predicates.add(cb.equal(root.get("type of food"),queryParams.getTypeOfFoodEnum()));
         }
-        if(priceForAdult != null){
-            predicates.add(cb.like(root.get("price for adult"), "%" + priceForAdult +"%"));
+        if(queryParams.getPriceForAdult()!= null){
+            predicates.add(cb.like(root.get("price for adult"), "%" + queryParams.getPriceForAdult() +"%"));
         }
-        if(priceForChild != null){
-            predicates.add(cb.like(root.get("price for child"), "%" + priceForChild +"%"));
+        if(queryParams.getPriceForChild() != null){
+            predicates.add(cb.like(root.get("price for child"), "%" + queryParams.getPriceForChild() +"%"));
         }
-        if(!promoted.toString().equals("")){
-            predicates.add(cb.equal(root.get("promoted"), promoted));
+        if(!queryParams.getPromoted().toString().equals("")){
+            predicates.add(cb.equal(root.get("promoted"), queryParams.getPromoted()));
         }
-        if(placesForAdult != null){
-            predicates.add(cb.equal(root.get("place for adult"), placesForAdult));
+        if(queryParams.getPlacesForAdult() != null){
+            predicates.add(cb.equal(root.get("place for adult"), queryParams.getPlacesForAdult()));
         }
-        if(placesForChild != null){
-            predicates.add(cb.equal(root.get("place for child"), placesForChild));
+        if(queryParams.getPlacesForChild() != null){
+            predicates.add(cb.equal(root.get("place for child"), queryParams.getPlacesForChild()));
         }
 
         query.where(predicates.toArray(new Predicate[0]));
