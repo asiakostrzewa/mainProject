@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 @Builder
@@ -12,13 +13,12 @@ public class TripDTO {
     private Long id;
     private StartLocation startLocation;
     private PlaceOfDestination placeOfDestination;
-    private String leaveDate;
-    private String returnDate;
-    //private Integer howManyDays;
+    private Date leaveDate;
+    private Date returnDate;
     private TypeOfFoodEnum typeOfFoodEnum;
     private BigDecimal priceForAdult;
     private BigDecimal priceForChild;
-    private boolean promoted;
+    private Boolean promoted;
     private Integer placesForAdult;
     private Integer placesForChild;
 }

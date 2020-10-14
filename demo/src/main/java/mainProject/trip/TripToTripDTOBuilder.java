@@ -1,14 +1,5 @@
 package mainProject.trip;
 
-import mainProject.airport.AirportRepository;
-import mainProject.city.CityRepository;
-import mainProject.continent.ContinentRepository;
-import mainProject.country.CountryRepository;
-import mainProject.hotel.HotelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-
 public class TripToTripDTOBuilder {
 
     public static TripDTO buildDTO(Trip trip){
@@ -37,7 +28,7 @@ public class TripToTripDTOBuilder {
         trip.setTypeOfFoodEnum(tripDTO.getTypeOfFoodEnum());
         trip.setPriceForAdult(tripDTO.getPriceForAdult());
         trip.setPriceForChild(tripDTO.getPriceForChild());
-        trip.setPromoted(tripDTO.isPromoted());
+        trip.setPromoted(tripDTO.getPromoted());
         trip.setPlacesForAdult(tripDTO.getPlacesForAdult());
         trip.setPlacesForChild(tripDTO.getPlacesForChild());
         return trip;

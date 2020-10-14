@@ -16,9 +16,6 @@ import java.util.Optional;
 public interface TripRepository extends JpaRepository<Trip,Long>, JpaSpecificationExecutor<Trip> {
 
     Optional<Trip> findById(Long id);
-    List<Trip> getAllTrips();
-    Trip getTripInfo(Long id);
-    List<Trip> findTrip();
-
+    Trip findTripById(Long id);
 
 }

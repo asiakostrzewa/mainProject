@@ -1,16 +1,14 @@
 package mainProject.trip;
 
-import java.awt.print.Pageable;
+
 import java.util.ArrayList;
 import javax.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +18,11 @@ public class TripService {
     @Autowired
     private TripRepository tripRepository;
 
-    public void createNewTrip(StartLocation startLocation, PlaceOfDestination placeOfDestination, String leaveDate, String returnDate, Integer howManyDays, TypeOfFoodEnum typeOfFoodEnum, BigDecimal priceForAdult, BigDecimal priceForChild, boolean promoted, Integer placesForAdult, Integer placesForChild) {
+    public void createNewTrip(StartLocation startLocation, PlaceOfDestination placeOfDestination, Date leaveDate, Date returnDate, TypeOfFoodEnum typeOfFoodEnum, BigDecimal priceForAdult, BigDecimal priceForChild, boolean promoted, Integer placesForAdult, Integer placesForChild) {
         Trip trip = new Trip();
         trip.setStartLocation(startLocation);
         trip.setPlaceOfDestination(placeOfDestination);
+        trip.setReturnDate(leaveDate);
         trip.setReturnDate(returnDate);
         trip.setTypeOfFoodEnum(typeOfFoodEnum);
         trip.setPriceForAdult(priceForAdult);
@@ -40,18 +39,17 @@ public class TripService {
     }
 
     public List<TripDTO> getAllTrips(){
-        return tripRepository.getAllTrips().stream()
+        return tripRepository.findAll().stream()
                 .map(TripToTripDTOBuilder::buildDTO)
                 .collect(Collectors.toList());
     }
 
     public Trip getTripInfo(Long id){
-        return tripRepository.getTripInfo(id);
+        return tripRepository.findTripById(id);
     }
 
     @Autowired
     EntityManager em;
-    //metoda
     public List<Trip> findTrip(QueryParams queryParams){
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Trip> query = cb.createQuery(Trip.class);
