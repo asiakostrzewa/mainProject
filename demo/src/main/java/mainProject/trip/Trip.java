@@ -2,10 +2,13 @@ package mainProject.trip;
 
 import lombok.Data;
 import mainProject.BaseEntity;
+import mainProject.LocalDateTimeConverter;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Data
@@ -14,9 +17,10 @@ public class Trip extends BaseEntity {
     private StartLocation startLocation;
     @ManyToOne
     private PlaceOfDestination placeOfDestination;
-    private String leaveDate;
-    private String returnDate;
-    //private Integer howManyDays;
+    @Convert(converter = LocalDateTimeConverter.class)
+    private Date leaveDate;
+    @Convert(converter = LocalDateTimeConverter.class)
+    private Date returnDate;
     private TypeOfFoodEnum typeOfFoodEnum;
     private BigDecimal priceForAdult;
     private BigDecimal priceForChild;
@@ -24,6 +28,6 @@ public class Trip extends BaseEntity {
     private Integer placesForAdult;
     private Integer placesForChild;
 
-//    private BigDecimal tripPrice;
+
 
 }

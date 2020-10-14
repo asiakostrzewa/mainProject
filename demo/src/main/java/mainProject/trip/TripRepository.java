@@ -5,20 +5,17 @@ import mainProject.continent.Continent;
 import mainProject.country.Country;
 import mainProject.hotel.Hotel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TripRepository extends JpaRepository<Trip,Long> {
+public interface TripRepository extends JpaRepository<Trip,Long>, JpaSpecificationExecutor<Trip> {
 
     Optional<Trip> findById(Long id);
-
-//    List<T> findTripsByContinent(Continent continent);
-//    List<Trip> findTripsByCountry(Country country);
-//    List<Trip> findTripsByCity(City city);
-//    List<Trip> findTripsByHotel(Hotel hotel);
-
+    Trip findTripById(Long id);
 
 }
