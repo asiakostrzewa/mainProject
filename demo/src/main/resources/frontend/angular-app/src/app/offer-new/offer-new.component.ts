@@ -16,21 +16,35 @@ export class OfferNewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  add(name: string, email: string): void {
+  add(name: string, continent: string, country: string, city: string, hotel: string, hotelStars: string, hotelDescription: string, airport: string, trip: string, startLocation: string, placeOfDestination: string, leaveDate: string, returnDate: string, howManyDays: string, typeOfFoodEnum: string, priceForAdult: string, priceForChild: string, promoted: string, placesForAdult: string, placesForChild: string): void {
 
     // Usunięcie białych znaków z danych
     name = name.trim();
-    email = email.trim();
+    continent = continent.trim();
+    country = country.trim();
+    city = city.trim();
+    hotel = hotel.trim();
+    hotelStars = hotelStars.trim();
+    hotelDescription = hotelDescription.trim();
+    airport = airport.trim();
+    trip = trip.trim();
+    startLocation = startLocation.trim();
+    placeOfDestination = placeOfDestination.trim();
+    leaveDate = leaveDate.trim();
+    returnDate = returnDate.trim();
+    howManyDays = howManyDays.trim();
+    typeOfFoodEnum = typeOfFoodEnum.trim();
+    priceForAdult = priceForAdult.trim();
+    priceForChild = priceForChild.trim();
+    promoted = promoted.trim();
+    placesForAdult = placesForAdult.trim();
+    placesForChild = placesForChild.trim();
 
     // Zaprzestanie wykonywania, kiedy pola są puste
-    if (!name || !email) {
+    if (!name || !continent || !country || !city || !hotel || !hotelStars || !hotelDescription || !airport || !trip || !startLocation || !placeOfDestination || !leaveDate || !returnDate || !howManyDays || !typeOfFoodEnum || !priceForAdult || !priceForChild || !promoted || !placesForAdult || !placesForChild) {
       return;
     }
 
-    // Zaprzestanie wykonywania, kiedy adres e-mail nie zawiera "@"
-    if (email.indexOf('@') < 1) {
-      return;
-    }
   }
 
 }

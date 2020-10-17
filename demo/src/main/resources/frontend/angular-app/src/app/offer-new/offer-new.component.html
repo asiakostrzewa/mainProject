@@ -1,22 +1,133 @@
 <div class="new-offer">
-  <h2>Napisz do nas!</h2>
+  <h2>Dodaj nową podróż</h2>
 
   <table class="fields">
     <tr>
       <td>
-        <label for="name">Imię i nazwisko:</label>
+        <label for="name">Nazwa wycieczki</label>
         <input type="text" id="name" #name>
       </td>
     </tr>
     <tr>
       <td>
-        <label for="email">Adres e-mail:</label>
-        <input type="email" id="email" #email>
+        <div>Kontynent
+          <input list="continent">
+          <datalist id="continent" #continent>
+            <option value="Ameryka Północna">
+            <option value="Ameryka Południowa">
+            <option value="Afryka">
+            <option value="Europa">
+            <option value="Azja">
+            <option value="Australia">
+          </datalist>
+        </div>
       </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="country">Kraj</label>
+        <input type="text" id="country" #country>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="city">Miasto</label>
+        <input type="text" id="city" #city>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="hotel">Nazwa hotelu</label>
+        <input type="text" id="hotel" #hotel>
+        <div>Ilość gwiazdek
+          <input list="hotelStars">
+          <datalist id="hotelStars" #hotelStars>
+            <option value="5">
+            <option value="4">
+            <option value="3">
+            <option value="2">
+            <option value="1">
+          </datalist>
+        </div>
+        <label for="hotelDescription">Opis</label>
+        <input type="text" placeholder="Obiekt położony jest na wzgórzach nad Oceanem Atlantyckim, skąd rozpościera się fantastyczny widok na okolicę. Na terenie obiektu znajdują się dwa baseny: jeden zewnętrzny, czynny w sezonie letnim i drugi kryty, czynny poza sezonem. Oprócz tego można tu pograć w siatkówkę, badmintona lub tenisa stołowego. Orzeźwiającego drinka wypijecie w jednym z 2 barów lub restauracji. Warto też poświęcić 30 min na dojazd komunikacją miejską do stolicy - przystanek autobusowy znajduje się naprzeciwko hotelu." id="hotelDescription" #hotelDescription>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="airport">Lotnisko</label>
+        <input type="text" id="airport" #airport>
+      </td>
+      <tr>
+      <td>
+        <label for="trip">Wycieczka</label>
+        <input type="text" id="trip" #trip>
+        <label for="startLocation">Wylot</label>
+        <input type="text" id="startLocation" #startLocation>
+        <label for="placeOfDestination">Przylot</label>
+        <input type="text" id="placeOfDestination" #placeOfDestination>
+        <label for="leaveDate">Data wyjazdu
+          <input id="leaveDate" type="date" #leaveDate>
+        </label>
+        <label for="returnDate">Data powrotu
+          <input id="returnDate" type="date" #returnDate>
+        </label>
+        <label for="howManyDays">Ilość dni</label>
+        <input type="text" id="howManyDays" #howManyDays>
+        <div>Opcja wyżywienia
+          <input list="typeOfFoodEnum">
+          <datalist id="typeOfFoodEnum" #typeOfFoodEnum>
+            <option value="BB (bed & breakfast) – samo śniadanie">
+            <option value="HB (half board) – śniadanie i obiadokolacja">
+            <option value="FB (full board) – pełne wyżywienie, które obejmuje śniadanie, obiad, kolację">
+            <option value="AI (all inclusive) – pełne wyżywienie, które obejmuje śniadanie, obiad, kolację, a ponadto napoje bezalkoholowe i alkohole, najczęściej regionalne, przekąski między posiłkami">
+            <option value="OV (overnight) – sam nocleg, bez wyżywienia">
+            <option value="SC (self catering) – oznacza wyżywienie gościa we własnym zakresie">
+            <option value="PP (program package) – posiłki wydawane zgodnie z programem">
+            <option value="ZPR – posiłki wydawane zgodnie z programem hotelu lub opisem imprezy">
+          </datalist>
+        </div>
+        <label for="priceForAdult">Cena za osobę dorosłą</label>
+        <input type="text" id="priceForAdult" #priceForAdult>
+        <label for="priceForChild">Cena za dziecko</label>
+        <input type="text" id="priceForChild" #priceForChild>
+        <div>Oferta promowana
+          <select id="promoted" #promoted>
+            <option>Tak</option>
+            <option>Nie</option>
+          </select>
+        </div>
+        <label for="placesForAdult">DOROŚLI</label>
+        <input type="text" id="placesForAdult" #placesForAdult>
+        <label for="placesForChild">DZIECI</label>
+        <input type="text" id="placesForChild" #placesForChild>
+      </td>
+    </tr>
+    <tr>
       <td>
         <button
           class="button button-seacolor"
-          (click)="add(name.value, email.value); name.value=''; email.value=''"
+          (click)="add(name.value, continent.value, country.value, city.value, hotel.value, hotelStars.value, hotelDescription.value, airport.value, trip.value, startLocation.value, placeOfDestination.value, leaveDate.value, returnDate.value, howManyDays.value, typeOfFoodEnum.value, priceForAdult.value, priceForChild.value, promoted.value, placesForAdult.value, placesForChild.value);
+          name.value='';
+          continent.value='';
+          country.value='';
+          city.value='';
+          hotel.value='';
+          hotelStars.value='';
+          hotelDescription.value='';
+          airport.value='';
+          trip.value='';
+          startLocation.value='';
+          placeOfDestination.value='';
+          leaveDate.value='';
+          returnDate.value='';
+          howManyDays.value='';
+          typeOfFoodEnum.value='';
+          priceForAdult.value='';
+          priceForChild.value='';
+          promoted.value='';
+          placesForAdult.value='';
+          placesForChild.value='';"
         >
           Dodaj
         </button>

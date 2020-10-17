@@ -9,6 +9,7 @@ import {OffersComponent }from './offers/offers.component';
 import {OfferEditComponent}from './offer-edit/offer-edit.component';
 import {NotFoundComponent}from './not-found/not-found.component';
 import {OfferNewComponent}from './offer-new/offer-new.component';
+import { ClientFormComponent } from './client-form/client-form.component';
 
 @NgModule({
 declarations: [
@@ -16,7 +17,8 @@ AppComponent,
 OffersComponent,
 OfferEditComponent,
 NotFoundComponent,
-OfferNewComponent
+OfferNewComponent,
+ClientFormComponent
 ],
 imports: [
 BrowserModule,
