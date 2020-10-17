@@ -1,0 +1,102 @@
+<section *ngIf="offer">
+  <h2>Edycja oferty #{{offer.id}} <i>{{offer.continent}}</i></h2>
+
+  <label for="name">Nazwa wycieczki</label>
+  <input type="text" id="name" [(ngModel)]="offer.name">
+
+  <label for="continent">Kontynent</label>
+  <input list="continent">
+  <datalist id="continent" [(ngModel)]="offer.continent">
+    <option value="Ameryka Północna">
+    <option value="Ameryka Południowa">
+    <option value="Afryka">
+    <option value="Europa">
+    <option value="Azja">
+    <option value="Australia">
+  </datalist>
+
+  <label for="country">Kraj</label>
+  <input type="text" id="country" [(ngModel)]="offer.country">
+
+  <label for="city">Miasto</label>
+  <input type="text" id="city" [(ngModel)]="offer.city">
+
+  <label for="hotel">Nazwa hotelu</label>
+  <input type="text" id="hotel" [(ngModel)]="offer.hotel">
+  <div>Ilość gwiazdek
+    <input list="hotelStars">
+    <datalist id="hotelStars" [(ngModel)]="offer.hotelStars">
+      <option value="5">
+      <option value="4">
+      <option value="3">
+      <option value="2">
+      <option value="1">
+    </datalist>
+  </div>
+  <label for="hotelDescription">Opis</label>
+  <input type="text"
+         placeholder="Obiekt położony jest na wzgórzach nad Oceanem Atlantyckim, skąd rozpościera się fantastyczny widok na okolicę. Na terenie obiektu znajdują się dwa baseny: jeden zewnętrzny, czynny w sezonie letnim i drugi kryty, czynny poza sezonem. Oprócz tego można tu pograć w siatkówkę, badmintona lub tenisa stołowego. Orzeźwiającego drinka wypijecie w jednym z 2 barów lub restauracji. Warto też poświęcić 30 min na dojazd komunikacją miejską do stolicy - przystanek autobusowy znajduje się naprzeciwko hotelu."
+         id="hotelDescription" [(ngModel)]="offer.hotelDescription">
+
+  <label for="airport">Lotnisko</label>
+  <input type="text" id="airport" [(ngModel)]="offer.airport">
+
+  <label for="trip">Wycieczka</label>
+  <input type="text" id="trip" [(ngModel)]="offer.trip">
+
+  <label for="startLocation">Wylot</label>
+  <input type="text" id="startLocation" [(ngModel)]="offer.startLocation">
+
+  <label for="placeOfDestination">Przylot</label>
+  <input type="text" id="placeOfDestination" [(ngModel)]="offer.placeOfDestination">
+
+  <label for="leaveDate">Data wyjazdu
+    <input id="leaveDate" type="date" [(ngModel)]="offer.leaveDate">
+  </label>
+
+  <label for="returnDate">Data powrotu
+    <input id="returnDate" type="date" [(ngModel)]="offer.returnDate">
+  </label>
+
+  <label for="howManyDays">Ilość dni</label>
+  <input type="text" id="howManyDays" [(ngModel)]="offer.howManyDays">
+
+  <div>Opcja wyżywienia
+    <input list="typeOfFoodEnum">
+    <datalist id="typeOfFoodEnum" [(ngModel)]="offer.typeOfFoodEnum">
+      <option value="BB (bed & breakfast) – samo śniadanie">
+      <option value="HB (half board) – śniadanie i obiadokolacja">
+      <option value="FB (full board) – pełne wyżywienie, które obejmuje śniadanie, obiad, kolację">
+      <option
+        value="AI (all inclusive) – pełne wyżywienie, które obejmuje śniadanie, obiad, kolację, a ponadto napoje bezalkoholowe i alkohole, najczęściej regionalne, przekąski między posiłkami">
+      <option value="OV (overnight) – sam nocleg, bez wyżywienia">
+      <option value="SC (self catering) – oznacza wyżywienie gościa we własnym zakresie">
+      <option value="PP (program package) – posiłki wydawane zgodnie z programem">
+      <option value="ZPR – posiłki wydawane zgodnie z programem hotelu lub opisem imprezy">
+    </datalist>
+  </div>
+
+  <label for="priceForAdult">Cena za osobę dorosłą</label>
+  <input type="text" id="priceForAdult" [(ngModel)]="offer.priceForAdult">
+
+  <label for="priceForChild">Cena za dziecko</label>
+  <input type="text" id="priceForChild" [(ngModel)]="offer.priceForChild">
+
+  <div>Oferta promowana
+    <select id="promoted" [(ngModel)]="offer.promoted">
+      <option>Tak</option>
+      <option>Nie</option>
+    </select>
+  </div>
+
+  <label for="placesForAdult">DOROŚLI</label>
+  <input type="text" id="placesForAdult" [(ngModel)]="offer.placesForAdult">
+
+  <label for="placesForChild">DZIECI</label>
+  <input type="text" id="placesForChild" [(ngModel)]="offer.placesForChild">
+
+  <div>
+    <button (click)="save()" class="button button-seacolor">Zapisz</button>
+    <button (click)="goBack()" class="button button-orange">Anuluj</button>
+  </div>
+</section>
