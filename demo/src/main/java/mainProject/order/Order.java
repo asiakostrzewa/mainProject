@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Entity
-    @Table(name = "order")
+    @Table(name = "orders")
     @ToString(exclude = "user")
     @Setter
     @Getter
@@ -41,7 +41,5 @@ import java.util.List;
         @Enumerated(EnumType.STRING)
         private OrderStatus orderStatus;
 
-    public Order(String username, BigDecimal calculateCartPrice, LocalDateTime now, List<OrderLine> orderLines, User user, OrderStatus aNew) {
-    }
 }
 

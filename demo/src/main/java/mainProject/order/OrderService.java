@@ -35,6 +35,7 @@ public class OrderService {
         Cart cart = userContextService.getCart();
         String loggedUserEmail = userContextService.getLoggedUserEmail();
         User user = userRepository.findByUsername(loggedUserEmail);
+        Customer customer= placeOrder().getCustomer();
 
         cart.getOrderLines()
                 .stream()
@@ -42,7 +43,7 @@ public class OrderService {
                 .map(e->e.getTrip()).forEach(tripRepository::save);
 
 
-        Order order = ordersRepository.save(new Order(user.getUsername(), cartService.calculateCartPrice(cart), LocalDateTime.now(), cart.getOrderLines(), user, OrderStatus.NEW));
+        Order order = ordersRepository.save(new Order(user.getUsername(), cartService.calculateCartPrice(cart), LocalDateTime.now(), cart.getOrderLines(), user,customer, OrderStatus.NEW));
         userContextService.clearCart();
         return order;
     }
