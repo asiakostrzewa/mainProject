@@ -34,7 +34,7 @@ public class TripToTripDTOBuilder {
                 .id(trip.getId())
                 .startLocation(trip.getStartLocation())
                 .placeOfDestination(trip.getPlaceOfDestination())
-                .leaveDate(trip.getLeaveDate())
+                .leaveDate(trip.getArriveDate())
                 .returnDate(trip.getReturnDate())
                 .typeOfFoodEnum(trip.getTypeOfFoodEnum())
                 .priceForAdult(trip.getPriceForAdult())
@@ -50,7 +50,7 @@ public class TripToTripDTOBuilder {
 
         trip.setStartLocation(tripDTO.getStartLocation());
         trip.setPlaceOfDestination(tripDTO.getPlaceOfDestination());
-        trip.setLeaveDate(tripDTO.getLeaveDate());
+        trip.setArriveDate(tripDTO.getLeaveDate());
         trip.setReturnDate(tripDTO.getReturnDate());
         //trip.setHowManyDays(tripDTO.getHowManyDays());
         trip.setTypeOfFoodEnum(tripDTO.getTypeOfFoodEnum());

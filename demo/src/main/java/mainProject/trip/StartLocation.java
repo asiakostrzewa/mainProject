@@ -15,6 +15,11 @@ public class StartLocation extends BaseEntity {
     private City city;
     @ManyToOne
     private Airport airport;
-    private Long startLocationId;
 
+    public StartLocation(City city, Airport airport ) {
+    }
+
+    public StartLocation() {
+
+    }
 }

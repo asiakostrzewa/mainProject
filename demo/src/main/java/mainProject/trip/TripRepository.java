@@ -15,7 +15,7 @@ public interface TripRepository extends JpaRepository<Trip,Long> {
 
     Optional<Trip> findById(Long id);
 
-//    List<T> findTripsByContinent(Continent continent);
+//    List<Trip> findTripsByContinent(Continent continent);
 //    List<Trip> findTripsByCountry(Country country);
 //    List<Trip> findTripsByCity(City city);
 //    List<Trip> findTripsByHotel(Hotel hotel);

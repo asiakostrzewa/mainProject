@@ -1,13 +1,11 @@
 package mainProject.trip;
 
-import java.util.ArrayList;
 import javax.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -19,6 +17,7 @@ public class TripService {
 
     @Autowired
     private TripToTripDTOBuilder tripToTripDTOBuilder;
+
 
     public void createNewTrip(StartLocation startLocation, PlaceOfDestination placeOfDestination, String leaveDate, String returnDate, Integer howManyDays, TypeOfFoodEnum typeOfFoodEnum, BigDecimal priceForAdult, BigDecimal priceForChild, boolean promoted, Integer placesForAdult, Integer placesForChild) {
         Trip trip = new Trip();
@@ -56,7 +55,6 @@ public class TripService {
         findTrip();
         System.out.println("udalo sie");
     }
-
 
 
 }

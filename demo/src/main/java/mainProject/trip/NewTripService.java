@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.persistence.ManyToOne;
 import javax.persistence.criteria.*;
 
+import mainProject.MockData;
 import mainProject.country.Country;
 import mainProject.hotel.Hotel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,15 +86,21 @@ public class NewTripService {
     private NewTripService newTripService;
 
     StartLocation startLocation = new StartLocation();
+    PlaceOfDestination placeOfDestination = new PlaceOfDestination();
 
-    @PostConstruct
-    public void addMockTrips() {
-        List<TripDTO> trip = newTripService.getTrip();
-        if (tripRepository.findAll().isEmpty()) {
-            mockProduct(startLocation.setAirport(airport),startLocationId(1), "20.05.2020", "22.05.2020", TypeOfFoodEnum.AI, BigDecimal.valueOf(2000.00), BigDecimal.valueOf(1200.00));
+    @Autowired
+    private MockData mockData;
 
-        }
-    }
+
+//    @PostConstruct
+//    public void addMockTrips() {
+//        List<TripDTO> trip = newTripService.getTrip();
+//        startLocation.setAirport();
+//        if (tripRepository.findAll().isEmpty()) {
+//            mockProduct(startLocation,placeOfDestination, "20.05.2020", "22.05.2020", TypeOfFoodEnum.AI, BigDecimal.valueOf(2000.00), BigDecimal.valueOf(1200.00));
+//
+//        }
+//    }
 }
 
 

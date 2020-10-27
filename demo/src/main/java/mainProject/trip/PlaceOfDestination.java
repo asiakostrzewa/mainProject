@@ -10,7 +10,13 @@ import mainProject.hotel.Hotel;
 
 @Data
 @Entity
+@Table(name = "Place_of_destination")
 public class PlaceOfDestination extends BaseEntity {
+    public PlaceOfDestination(City city, Hotel hotel, Airport airport) {
+        this.city = city;
+        this.hotel = hotel;
+        this.airport = airport;
+    }
 
     @ManyToOne
     private City city;
@@ -19,4 +25,8 @@ public class PlaceOfDestination extends BaseEntity {
     @ManyToOne
     private Airport airport;
 
+
+    public PlaceOfDestination() {
+
+    }
 }

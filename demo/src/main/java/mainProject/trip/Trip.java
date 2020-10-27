@@ -14,7 +14,7 @@ public class Trip extends BaseEntity {
     private StartLocation startLocation;
     @ManyToOne
     private PlaceOfDestination placeOfDestination;
-    private String leaveDate;
+    private String arriveDate;
     private String returnDate;
     //private Integer howManyDays;
     private TypeOfFoodEnum typeOfFoodEnum;
